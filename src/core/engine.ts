@@ -131,8 +131,12 @@ export function decline(word: string, caseName: Case, options: DeclensionOptions
         (caseName === CaseEnum.NOMINATIVE ||
           caseName === CaseEnum.ACCUSATIVE ||
           caseName === CaseEnum.VOCATIVE);
-      const resultStem = isBareSingular ? stem : applyIstOstAlternation(stem);
-      result = resultStem + rule.suffix;
+      // The bare forms reconstruct the original nominative singular exactly
+      // (stem + whatever ending splitStem peeled off — 'ь' or ''), rather
+      // than trusting the suffix table, since that ending isn't derivable
+      // from the SOFT/MIXED group alone (радість has it, любов doesn't,
+      // despite both being SOFT-group for plural-spelling purposes).
+      result = isBareSingular ? stem + ending : applyIstOstAlternation(stem) + rule.suffix;
     }
   } else {
     const extension = detectFourthDeclensionExtension(ending);

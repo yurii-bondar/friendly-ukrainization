@@ -20,4 +20,24 @@ describe('3rd declension (feminine consonant/-ь nouns)', () => {
     expect(decline('розкіш', Case.DATIVE, { number: 'plural' })).toBe('розкішам');
     expect(decline('розкіш', Case.GENITIVE, { number: 'plural' })).toBe('розкішей');
   });
+
+  it('reconstructs the bare nominative/accusative/vocative singular exactly, with or without a trailing ь', () => {
+    // радість peels off a trailing ь (splitStem) and must get it back;
+    // любов has no trailing ь to begin with and must not gain one.
+    expect(decline('радість', Case.NOMINATIVE)).toBe('радість');
+    expect(decline('радість', Case.ACCUSATIVE)).toBe('радість');
+    expect(decline('радість', Case.VOCATIVE)).toBe('радість');
+    expect(decline('любов', Case.NOMINATIVE)).toBe('любов');
+    expect(decline('любов', Case.ACCUSATIVE)).toBe('любов');
+  });
+
+  it('doubles a single final consonant in the instrumental singular (подорож -> подорожжю)', () => {
+    // ніч/річ/любов are bundled exceptions-dictionary overrides, so they'd
+    // exercise the exceptions lookup rather than this rule; подорож isn't.
+    expect(decline('подорож', Case.INSTRUMENTAL)).toBe('подорожжю');
+  });
+
+  it('adds a plain -ю with no doubling after an existing consonant cluster (радість -> радістю)', () => {
+    expect(decline('радість', Case.INSTRUMENTAL)).toBe('радістю');
+  });
 });

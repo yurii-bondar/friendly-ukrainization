@@ -7,6 +7,14 @@ import { deIotify, table, type NumberTable } from './types.js';
 // their oblique endings without я/ю (Ukrainian orthography forbids я/ю
 // after ж,ч,ш,щ), unlike ь-marked stems (радість, тінь).
 
+// The nominative/accusative/vocative singular suffix here is never actually
+// used — the engine reconstructs those three bare forms directly as
+// stem + the original nominative ending (see engine.ts), since that ending
+// is 'ь' for some 3rd-declension nouns (радість, сіль) and '' for others
+// (ніч, любов) independently of the SOFT/MIXED split below (which is a
+// separate, purely phonological classification: sibilant-final stems spell
+// their plural endings without я/ю, regardless of whether the nominative
+// singular had a trailing ь).
 const SINGULAR = table(['', 'і', 'і', '', 'ю', 'і', '']);
 
 const PLURAL_SOFT = table(['і', 'ей', 'ям', 'і', 'ями', 'ях', 'і']);
