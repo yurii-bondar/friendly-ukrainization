@@ -1,5 +1,8 @@
 # friendly-ukrainization
 
+[![CI](https://github.com/yurii-bondar/friendly-ukrainization/actions/workflows/ci.yml/badge.svg)](https://github.com/yurii-bondar/friendly-ukrainization/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/friendly-ukrainization.svg)](https://www.npmjs.com/package/friendly-ukrainization)
+
 Decline Ukrainian words — common nouns, full names, and numeral agreement — across all 7 grammatical cases (називний, родовий, давальний, знахідний, орудний, місцевий, кличний).
 
 Written in TypeScript, zero runtime dependencies, ships as dual ESM/CJS with full type definitions.

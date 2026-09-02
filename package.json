@@ -23,6 +23,18 @@
     "dist"
   ],
   "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yurii-bondar/friendly-ukrainization.git"
+  },
+  "homepage": "https://github.com/yurii-bondar/friendly-ukrainization#readme",
+  "bugs": {
+    "url": "https://github.com/yurii-bondar/friendly-ukrainization/issues"
+  },
+  "author": {
+    "name": "Yurii Bondar",
+    "email": "yurii.bondar.vn@gmail.com"
+  },
   "engines": {
     "node": ">=20"
   },
@@ -47,7 +59,8 @@
   ],
   "license": "MIT",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
