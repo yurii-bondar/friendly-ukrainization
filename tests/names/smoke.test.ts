@@ -53,6 +53,12 @@ describe('names smoke', () => {
     expect(declineName(name, Case.GENITIVE).full).toBe('Ольги Дзюби-Ковальської');
   });
 
+  it('omits a missing firstName from the full string', () => {
+    const name = { patronymic: 'Олександрівна', lastName: 'Ковальська' };
+    expect(declineName(name, Case.GENITIVE).full).toBe('Олександрівни Ковальської');
+    expect(declineName(name, Case.GENITIVE).firstName).toBeUndefined();
+  });
+
   it('produces all 7 cases via declineNameAll', () => {
     const all = declineNameAll({ firstName: 'Марія' });
     expect(all[Case.NOMINATIVE].full).toBe('Марія');

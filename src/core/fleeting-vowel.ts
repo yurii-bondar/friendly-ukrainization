@@ -13,6 +13,9 @@ export function hasFleetingVowel(stem: string): boolean {
 }
 
 export function dropFleetingVowel(stem: string): string {
+  // Unreachable via the public API: hasFleetingVowel only returns true when
+  // the stem ends in ок/ец/ен, which is already 2 characters long.
+  /* v8 ignore next 3 */
   if (stem.length < 2) {
     return stem;
   }

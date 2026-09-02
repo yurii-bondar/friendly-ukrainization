@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { CliUsageError, runCli, USAGE } from '../../src/cli-runner.js';
+import type { Case } from '../../src/types.js';
 
 describe('runCli — decline', () => {
   it('declines a word for a single case', () => {
@@ -33,7 +34,7 @@ describe('runCli — numeral', () => {
   });
 
   it('prints all cases as JSON when --case is omitted', () => {
-    const all = JSON.parse(runCli(['numeral', '5'])) as Record<string, string>;
+    const all = JSON.parse(runCli(['numeral', '5'])) as Record<Case, string>;
     expect(all.genitive).toBe("п'яти");
   });
 
@@ -54,6 +55,11 @@ describe('runCli — adjective', () => {
   it('rejects a missing word', () => {
     expect(() => runCli(['adjective'])).toThrow(CliUsageError);
   });
+
+  it('prints all cases as JSON when --case is omitted', () => {
+    const all = JSON.parse(runCli(['adjective', 'молодий'])) as Record<Case, string>;
+    expect(all.genitive).toBe('молодого');
+  });
 });
 
 describe('runCli — name', () => {
@@ -71,6 +77,11 @@ describe('runCli — name', () => {
 
   it('rejects fewer than 2 positional arguments', () => {
     expect(() => runCli(['name', 'Дмитро'])).toThrow(CliUsageError);
+  });
+
+  it('prints all cases as JSON when --case is omitted', () => {
+    const all = JSON.parse(runCli(['name', 'Дмитро', 'Ковальчук'])) as Record<Case, { full: string }>;
+    expect(all.genitive.full).toBe('Дмитра Ковальчука');
   });
 });
 

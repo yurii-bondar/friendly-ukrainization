@@ -36,4 +36,12 @@ describe('transliterate (KMU resolution No. 55 table)', () => {
   it('capitalizes only the first Latin letter of a multi-letter transliteration', () => {
     expect(transliterate('Щастя')).toBe('Shchastia');
   });
+
+  it('drops an uppercase Ь (no letter to capitalize) instead of producing a stray character', () => {
+    expect(transliterate('ДЕНЬ')).toBe('DEN');
+  });
+
+  it('spells a lowercase, word-initial зг the same way (no capitalization)', () => {
+    expect(transliterate('згадати')).toBe('zghadaty');
+  });
 });

@@ -31,6 +31,10 @@ describe('gender detection', () => {
   it('throws AmbiguousGenderError when nothing determines gender', () => {
     expect(() => declineName({ lastName: 'Шевченко' }, Case.GENITIVE)).toThrow(AmbiguousGenderError);
   });
+
+  it('labels a completely empty name in the AmbiguousGenderError message', () => {
+    expect(() => declineName({}, Case.GENITIVE)).toThrow('(empty name)');
+  });
 });
 
 describe('given names ending in -о', () => {

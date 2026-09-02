@@ -18,4 +18,14 @@ describe('declineAll / declension / isIndeclinable', () => {
     expect(isIndeclinable('пальто')).toBe(true);
     expect(isIndeclinable('рука')).toBe(false);
   });
+
+  it('uses genitive plural for an animate plural accusative referent', () => {
+    expect(decline('студент', Case.ACCUSATIVE, { animacy: 'animate', number: 'plural' })).toBe('студентів');
+    expect(decline('студент', Case.GENITIVE, { number: 'plural' })).toBe('студентів');
+  });
+
+  it('uses nominative plural for an inanimate (default) plural accusative referent', () => {
+    expect(decline('товар', Case.ACCUSATIVE, { number: 'plural' })).toBe('товари');
+    expect(decline('товар', Case.NOMINATIVE, { number: 'plural' })).toBe('товари');
+  });
 });

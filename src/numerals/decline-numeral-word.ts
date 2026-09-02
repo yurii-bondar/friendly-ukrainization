@@ -13,9 +13,15 @@ const SCALES: ReadonlyArray<{ value: number; word: string; gender: Gender }> = [
 
 const MAX_SUPPORTED = SCALES.reduce((sum, scale) => sum + scale.value * 999, 999);
 
+// Below, every "!forms" guard is unreachable via the public API: n is
+// always in a range the corresponding data table fully covers (1-19,
+// 20/30/.../90, 100/200/.../900). They exist only because getUnitForms/
+// getTensForms/getHundredsForms return `Forms | undefined` for the general
+// case, which TypeScript's noUncheckedIndexedAccess otherwise flags.
 function declineUnitsGroup(n: number, caseName: Case, gender: Gender, animacy: Animacy): string {
   if (n < 20) {
     const forms = getUnitForms(n, gender, animacy);
+    /* v8 ignore next 3 */
     if (!forms) {
       throw new RangeError(`declineNumeralWord: unsupported number ${n}`);
     }
@@ -25,6 +31,7 @@ function declineUnitsGroup(n: number, caseName: Case, gender: Gender, animacy: A
     const tens = Math.floor(n / 10) * 10;
     const units = n % 10;
     const tensForms = getTensForms(tens);
+    /* v8 ignore next 3 */
     if (!tensForms) {
       throw new RangeError(`declineNumeralWord: unsupported number ${n}`);
     }
@@ -33,6 +40,7 @@ function declineUnitsGroup(n: number, caseName: Case, gender: Gender, animacy: A
       return tensWord;
     }
     const unitForms = getUnitForms(units, gender, animacy);
+    /* v8 ignore next 3 */
     if (!unitForms) {
       throw new RangeError(`declineNumeralWord: unsupported number ${n}`);
     }
@@ -42,6 +50,7 @@ function declineUnitsGroup(n: number, caseName: Case, gender: Gender, animacy: A
   const hundreds = Math.floor(n / 100) * 100;
   const remainder = n % 100;
   const hundredsForms = getHundredsForms(hundreds);
+  /* v8 ignore next 3 */
   if (!hundredsForms) {
     throw new RangeError(`declineNumeralWord: unsupported number ${n}`);
   }
