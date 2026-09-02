@@ -8,6 +8,7 @@ import {
   StemGroup,
   type Case,
   type DeclensionOptions,
+  type WordEntry,
 } from '../types.js';
 import { EXCEPTIONS } from '../data/exceptions/index.js';
 import { normalizeApostrophe } from '../utils/apostrophe.js';
@@ -40,7 +41,7 @@ export function decline(word: string, caseName: Case, options: DeclensionOptions
   const trimmed = word.trim();
   const normalized = normalizeApostrophe(trimmed);
   const lower = normalized.toLowerCase();
-  const entry = EXCEPTIONS[lower];
+  const entry = options.exceptions?.[lower] ?? EXCEPTIONS[lower];
   const number = resolvedNumber(options);
 
   if (entry) {
@@ -154,7 +155,8 @@ export function declineAll(word: string, options?: DeclensionOptions): Record<Ca
 
 export { detectGender } from './detect-gender.js';
 
-export function isIndeclinable(word: string): boolean {
+export function isIndeclinable(word: string, exceptions?: Record<string, WordEntry>): boolean {
   const lower = normalizeApostrophe(word.trim()).toLowerCase();
-  return EXCEPTIONS[lower]?.indeclinable ?? false;
+  const entry = exceptions?.[lower] ?? EXCEPTIONS[lower];
+  return entry?.indeclinable ?? false;
 }

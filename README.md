@@ -75,6 +75,44 @@ declineNumeralWord(2_000_000, Case.NOMINATIVE); // "два мільйони"
 
 `declineNumeralWord` declines the numeral word itself and supports whole numbers **0 up to 999 trillion**, composing тисяча/мільйон/мільярд/трильйон as scale nouns per group of 3 digits (each scale noun's own group agrees in case and number with that group's count — see [Limitations](#limitations)).
 
+### Adjectives
+
+```ts
+import { declineAdjective, declineAdjectiveAll, Case, Gender } from 'friendly-ukrainization';
+
+declineAdjective('молодий', Case.GENITIVE, Gender.FEMININE); // "молодої"
+declineAdjective('синій', Case.DATIVE, Gender.NEUTER); // "синьому"
+declineAdjective('молодий', Case.ACCUSATIVE, Gender.MASCULINE, { animacy: 'animate' }); // "молодого"
+
+declineAdjectiveAll('молодий', Gender.MASCULINE);
+// { nominative: 'молодий', genitive: 'молодого', ..., instrumental: 'молодим', ... }
+```
+
+`word` is always the dictionary form — masculine nominative singular (e.g. `молодий`, `синій`) — the same convention as noun lookups. Both the closed `-ій` soft group (синій, останній, справжній) and the regular `-ий` hard group are handled; animate accusative mirrors nouns (genitive-as-accusative for masculine singular and every gender in the plural, never for feminine/neuter singular).
+
+### Transliteration
+
+```ts
+import { transliterate } from 'friendly-ukrainization';
+
+transliterate('Дмитро Олександрович Ковальчук'); // "Dmytro Oleksandrovych Kovalchuk"
+transliterate('Юрій'); // "Yurii"
+```
+
+Follows the official table from Cabinet of Ministers resolution No. 55 (2010) — the standard used on Ukrainian passports — including the word-initial forms of `є/ї/й/ю/я`, the `зг` → `zgh` digraph, and dropping apostrophes/`ь`.
+
+### CLI
+
+```bash
+npx friendly-ukrainization decline студент --case genitive --animacy animate   # студента
+npx friendly-ukrainization numeral 21000 --case genitive                       # двадцяти однієї тисячі
+npx friendly-ukrainization adjective молодий --gender feminine --case dative   # молодій
+npx friendly-ukrainization name Дмитро Олександрович Ковальчук --case genitive # Дмитра Олександровича Ковальчука
+npx friendly-ukrainization transliterate Дмитро Ковальчук                      # Dmytro Kovalchuk
+```
+
+Omit `--case` to print all 7 cases as JSON. Run `npx friendly-ukrainization --help` for the full flag list.
+
 ## API
 
 - `decline(word, case, options?)`, `declension(word, case, options?)` (alias) → `string`
@@ -88,8 +126,17 @@ declineNumeralWord(2_000_000, Case.NOMINATIVE); // "два мільйони"
 - `pluralize(count, [one, few, many])` → `string`
 - `declineWithNumber(word, count, case, options?)` → `string`
 - `declineNumeralWord(count, case, gender?, animacy?)` → `string` (0–999,999,999,999,999)
+- `declineAdjective(word, case, gender?, options?)` → `string`
+- `declineAdjectiveAll(word, gender?, options?)` → `Record<Case, string>`
+- `transliterate(text)` → `string`
 
-`options: DeclensionOptions` — `{ gender?, animacy?, number?, declensionClass? }`, all optional.
+`options: DeclensionOptions` — `{ gender?, animacy?, number?, declensionClass?, exceptions? }`, all optional. `exceptions` is a `Record<string, WordEntry>` keyed by lowercase nominative singular — an entry there fully replaces the bundled entry for that word (not merged field-by-field), so callers can cover their own irregulars, names, or brand words without waiting on a PR to the bundled dictionary:
+
+```ts
+decline('гаджет', Case.INSTRUMENTAL, {
+  exceptions: { гаджет: { forms: { [Case.INSTRUMENTAL]: 'гаджетом-особливо' } } },
+}); // "гаджетом-особливо"
+```
 
 `Case`, `Gender`, `Animacy`, `GrammaticalNumber`, `DeclensionClass`, `NumeralForm` are exported as const-object "enums" (`Case.GENITIVE`), each with a matching string-union type.
 
@@ -104,6 +151,8 @@ This library targets **rule-based coverage for the 4 Ukrainian noun declensions 
 - **Genitive-plural epenthetic vowel insertion** (`сестра → сестер`, `вікно → вікон`) uses a best-effort 2-consonant-cluster heuristic; words that don't fit (`дошка → дощок`) need an exceptions-dictionary entry.
 - **Fleeting о/е** (`садок → садка`) is detected from the productive `-ок`/`-ець`/`-ень` endings; a handful of words that merely end in those letters without a fleeting vowel (`крок → кроку`) are excluded via the exceptions dictionary.
 - **Numeral word declension caps at 999 trillion** — no scale noun beyond трильйон is bundled, so anything requiring квадрильйон and up is out of scope.
+- **`declineAdjective` covers qualitative/relative adjectives only** (hard `-ий` and the closed soft `-ій` group) — possessive adjectives (`-ів`/`-ин`, e.g. `батьків`, `мамин`) and short-form adjectives are not handled.
+- **`transliterate` implements the official table only** — it does not attempt a phonetic or reversible transliteration, and unrecognized (non-Ukrainian-Cyrillic) characters pass through unchanged.
 - Not every Ukrainian noun, name, or numeral is covered — this is a rule engine plus a growing exceptions list, not an exhaustive dictionary. Contributions adding exceptions-dictionary entries are welcome.
 
 ## Development

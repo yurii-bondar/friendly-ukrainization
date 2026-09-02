@@ -58,6 +58,13 @@ export interface DeclensionOptions {
   animacy?: Animacy;
   number?: GrammaticalNumber;
   declensionClass?: DeclensionClass;
+  /**
+   * User-supplied exceptions, keyed by lowercase nominative singular. An
+   * entry here fully replaces the bundled entry for that word (if any) —
+   * entries are not merged field-by-field — so callers can cover their own
+   * irregulars/names without waiting on a PR to the bundled dictionary.
+   */
+  exceptions?: Record<string, WordEntry>;
 }
 
 export interface WordEntry {
