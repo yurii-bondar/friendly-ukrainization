@@ -7,7 +7,9 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'lcov'],
       include: ['src/**/*.ts'],
-      exclude: ['src/data/**'],
+      // src/data/**: static tables, not logic. src/cli.ts: a thin
+      // process.argv/console/exit shim around the fully-tested cli-runner.ts.
+      exclude: ['src/data/**', 'src/cli.ts'],
       thresholds: {
         statements: 90,
         lines: 90,
