@@ -67,11 +67,13 @@ pluralize(21, ['товар', 'товари', 'товарів']); // "товар"
 getNumeralForm(5); // "many"
 
 declineNumeralWord(125, Case.GENITIVE); // "ста двадцяти п'яти"
+declineNumeralWord(21_000, Case.NOMINATIVE); // "двадцять одна тисяча"
+declineNumeralWord(2_000_000, Case.NOMINATIVE); // "два мільйони"
 ```
 
 `declineWithNumber` only forces a genitive-plural form when the governing case is nominative (or inanimate accusative) — every other case just picks singular vs. plural of that same case (`declineWithNumber('товар', 5, Case.DATIVE)` → `"товарам"`, not a genitive override).
 
-`declineNumeralWord` declines the numeral word itself and supports whole numbers **0–999** (see [Limitations](#limitations)).
+`declineNumeralWord` declines the numeral word itself and supports whole numbers **0 up to 999 trillion**, composing тисяча/мільйон/мільярд/трильйон as scale nouns per group of 3 digits (each scale noun's own group agrees in case and number with that group's count — see [Limitations](#limitations)).
 
 ## API
 
@@ -85,7 +87,7 @@ declineNumeralWord(125, Case.GENITIVE); // "ста двадцяти п'яти"
 - `getNumeralForm(count)` → `NumeralForm` (`'one' | 'few' | 'many'`)
 - `pluralize(count, [one, few, many])` → `string`
 - `declineWithNumber(word, count, case, options?)` → `string`
-- `declineNumeralWord(count, case, gender?, animacy?)` → `string` (0–999)
+- `declineNumeralWord(count, case, gender?, animacy?)` → `string` (0–999,999,999,999,999)
 
 `options: DeclensionOptions` — `{ gender?, animacy?, number?, declensionClass? }`, all optional.
 
@@ -101,7 +103,7 @@ This library targets **rule-based coverage for the 4 Ukrainian noun declensions 
 - **The і/о,е stem alternation** (`ніч → ночі`, `сіль → солі`, `гість → гостя`) is only implemented for a bundled list of common words, not as a general rule (it's stress- and lexeme-dependent).
 - **Genitive-plural epenthetic vowel insertion** (`сестра → сестер`, `вікно → вікон`) uses a best-effort 2-consonant-cluster heuristic; words that don't fit (`дошка → дощок`) need an exceptions-dictionary entry.
 - **Fleeting о/е** (`садок → садка`) is detected from the productive `-ок`/`-ець`/`-ень` endings; a handful of words that merely end in those letters without a fleeting vowel (`крок → кроку`) are excluded via the exceptions dictionary.
-- **Numeral word declension caps at 0–999** — thousands and up are out of scope for v1.
+- **Numeral word declension caps at 999 trillion** — no scale noun beyond трильйон is bundled, so anything requiring квадрильйон and up is out of scope.
 - Not every Ukrainian noun, name, or numeral is covered — this is a rule engine plus a growing exceptions list, not an exhaustive dictionary. Contributions adding exceptions-dictionary entries are welcome.
 
 ## Development

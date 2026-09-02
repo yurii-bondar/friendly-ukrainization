@@ -54,8 +54,19 @@ describe('numerals smoke', () => {
     expect(declineNumeralWord(125, Case.GENITIVE)).toBe("ста двадцяти п'яти");
   });
 
-  it('rejects numbers outside the supported 0-999 range', () => {
-    expect(() => declineNumeralWord(1000, Case.NOMINATIVE)).toThrow(RangeError);
+  it('declines thousands, millions and billions as scale-noun groups', () => {
+    expect(declineNumeralWord(1000, Case.NOMINATIVE)).toBe('одна тисяча');
+    expect(declineNumeralWord(2000, Case.NOMINATIVE)).toBe('дві тисячі');
+    expect(declineNumeralWord(21000, Case.NOMINATIVE)).toBe('двадцять одна тисяча');
+    expect(declineNumeralWord(125000, Case.GENITIVE)).toBe("ста двадцяти п'яти тисяч");
+    expect(declineNumeralWord(1_000_000, Case.NOMINATIVE)).toBe('один мільйон');
+    expect(declineNumeralWord(2_000_000, Case.NOMINATIVE)).toBe('два мільйони');
+    expect(declineNumeralWord(1_000_000_000, Case.NOMINATIVE)).toBe('один мільярд');
+    expect(declineNumeralWord(1001, Case.NOMINATIVE)).toBe('одна тисяча один');
+  });
+
+  it('rejects numbers outside the supported range', () => {
+    expect(() => declineNumeralWord(1e15, Case.NOMINATIVE)).toThrow(RangeError);
     expect(() => declineNumeralWord(-1, Case.NOMINATIVE)).toThrow(RangeError);
   });
 });
