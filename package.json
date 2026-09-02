@@ -1,6 +1,6 @@
 {
   "name": "friendly-ukrainization",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Decline Ukrainian words, names and numerals across all 7 grammatical cases, following orthography rules and exceptions",
   "type": "module",
   "main": "./dist/index.cjs",

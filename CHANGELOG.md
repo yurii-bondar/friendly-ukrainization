@@ -1,3 +1,9 @@
+## [1.1.1](https://github.com/yurii-bondar/friendly-ukrainization/compare/v1.1.0...v1.1.1) (2026-09-02)
+
+### Bug Fixes
+
+* reconstruct the bare 3rd-declension singular exactly, ь included ([2fde211](https://github.com/yurii-bondar/friendly-ukrainization/commit/2fde211367df6079ddab8ab31e92cd4734ef39eb))
+
 ## [1.1.0](https://github.com/yurii-bondar/friendly-ukrainization/compare/v1.0.0...v1.1.0) (2026-09-02)
 
 ### Features
