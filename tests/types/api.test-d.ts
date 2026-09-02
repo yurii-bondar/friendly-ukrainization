@@ -2,6 +2,8 @@ import { expectAssignable, expectError, expectType } from 'tsd';
 import {
   Case,
   decline,
+  declineAdjective,
+  declineAdjectiveAll,
   declineAll,
   declineName,
   declineNameAll,
@@ -12,6 +14,7 @@ import {
   getNumeralForm,
   isIndeclinable,
   pluralize,
+  transliterate,
   type DeclinedPersonName,
   type Gender,
   type NumeralForm,
@@ -37,3 +40,10 @@ expectType<NumeralForm>(getNumeralForm(5));
 expectAssignable<string>(getNumeralForm(5));
 expectType<string>(declineWithNumber('товар', 5, Case.NOMINATIVE));
 expectType<string>(declineNumeralWord(5, Case.GENITIVE));
+
+expectType<string>(declineAdjective('молодий', Case.GENITIVE));
+expectType<string>(declineAdjective('молодий', Case.GENITIVE, 'feminine', { animacy: 'animate' }));
+expectType<Record<Case, string>>(declineAdjectiveAll('молодий'));
+
+expectType<string>(transliterate('Дмитро Ковальчук'));
+expectError(transliterate(123));
